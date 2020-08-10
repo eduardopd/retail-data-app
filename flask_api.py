@@ -4,7 +4,7 @@ import numpy as np
 import pickle
 
 app = Flask(__name__)
-pickle_in=open('flask_model.pkl','rb')
+pickle_in=open('model.pkl','rb')
 model = pickle.load(pickle_in)
 
 @app.route('/')
@@ -13,17 +13,12 @@ def welcome():
 
 @app.route('/predict_parameters', methods=["Get"])
 def predict_sales_parameters():   
-    temperature = request.args.get("Temperature")
-    fuel_price = request.args.get("Fuel_Price")
-    cpi = request.args.get("CPI")
-    unemployment = request.args.get("Unemployment")
     dept = request.args.get("Dept")
-    isHoliday_y = request.args.get("IsHoliday_y")
     year_week = request.args.get("Year_Week")
     last_week_sales = request.args.get("Last_Week_Sales")
     last_week_diff = request.args.get("Last_Week_Diff")
 
-    p = model.predict([[temperature, fuel_price, cpi, unemployment, dept, isHoliday_y, year_week, last_week_sales, last_week_diff]])
+    p = model.predict([[dept, year_week, last_week_sales, last_week_diff]])
     
     return "Valores da previsão:" + str(p) 
 
